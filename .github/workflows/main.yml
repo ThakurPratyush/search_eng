@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
 
-  # to run this workflow manually from the Actions tab  jkb
+  # to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,13 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      - name: Pull latest changes
+        run: git pull origin main --rebase  # Pull the latest changes from the remote
       - name: Push to hub
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://p222t222:$HF_TOKEN@huggingface.co/spaces/p222t222/search_eng1 main
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # This is your Hugging Face token from GitHub secrets
+        run: |
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your-email@example.com"
+          git remote set-url origin https://p222t222:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/p222t222/search_eng1
+          git push origin main
